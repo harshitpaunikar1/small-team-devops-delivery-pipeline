@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pragmatism in the Pipeline: Release Lifecycles for Small Teams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Greyscale Industrial Theme */
+    :root {
+      --bg: #ffffff;
+      --surface: #f4f4f4;
+      --fg-black: #000000;
+      --fg-mid: #333333;
+      --fg-light: #777777;
+      --border-thin: #dddddd;
+      --border-thick: #111111;
+      
+      --font-body: 'Karla', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    /* Resets & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg);
+      color: var(--fg-black);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      font-size: 18px;
+    }
+
+    a {
+      color: var(--fg-black);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    /* Industrial Layout */
+    .machine-grid {
+      display: grid;
+      grid-template-columns: minmax(1rem, 1fr) minmax(auto, 800px) minmax(1rem, 1fr);
+      row-gap: 3rem;
+    }
+
+    .machine-grid > * {
+      grid-column: 2;
+    }
+    
+    header {
+      margin-top: 6rem;
+      border-top: 6px solid var(--fg-black);
+      padding-top: 3rem;
+    }
+
+    h1 {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+    }
+
+    .deck {
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: var(--fg-mid);
+      max-width: 700px;
+      line-height: 1.5;
+    }
+
+    /* Typography */
+    p { margin-bottom: 1.5rem; color: var(--fg-mid); }
+    strong { color: var(--fg-black); font-weight: 700; }
+    
+    /* Pipeline Labels */
+    h2 {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      background-color: var(--fg-black);
+      color: var(--bg);
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 4rem 0 2rem 0;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem 0;
+      border-bottom: 1px solid var(--border-thin);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Monospace Blocks */
+    .terminal-block {
+      background-color: var(--surface);
+      border: 1px solid var(--border-thin);
+      border-left: 5px solid var(--fg-black);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--fg-mid);
+    }
+    .cmd { color: var(--fg-black); font-weight: 700; }
+
+    /* SVG Figure Container */
+    .full-width-figure {
+      grid-column: 1 / -1;
+      max-width: 1200px;
+      margin: 4rem auto;
+      width: 100%;
+      padding: 0 1rem;
+    }
+    
+    .svg-blueprint {
+      width: 100%;
+      border: 2px solid var(--border-thick);
+      background-color: #ffffff;
+      padding: 2rem;
+      box-shadow: 10px 10px 0 var(--surface);
+    }
+    
+    figcaption {
+      font-family: var(--font-body);
+      font-style: italic;
+      color: var(--fg-light);
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      text-align: left;
+      max-width: 800px;
+    }
+
+    .stop-condition {
+      border: 1px solid var(--fg-black);
+      padding: 1rem 1.5rem;
+      margin: 2rem 0;
+    }
+    .stop-condition h4 {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .stop-condition p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="machine-grid">
+    <header>
+      <h1>Pragmatism in the Pipeline</h1>
+      <p class="deck">Operational fragility is rarely solved by adopting massive, sprawling orchestration frameworks. For a small engineering team, reliability is achieved by enforcing rigid, unglamorous stage gates—packaging, scanning, deploying, and observing—without pretending to be a hyperscaler.</p>
+    </header>
+
+    <main>
+      <p>The standard DevOps narrative sold to small teams is profoundly hazardous. It encourages adopting Kubernetes when a single virtual machine will do, and pushes sprawling microservice meshes when the actual underlying business logic fits in a single Docker container. This "infrastructure tourism" inevitably leads to operational fragility: the team spends more time tending to the deployment machinery than advancing the product.</p>
+
+      <p>True operational reliability for small teams requires aggressive pragmatism. The goal is not an impressive stack; the goal is a boring, predictable lifecycle. A developer commits code, a machine builds it, a scanner checks it, and an automation server deploys it. When it breaks, the observation layer flags it, and the rollback is a one-command retreat. The focus is entirely on the stage gates.</p>
+
+      <h2>STAGE_01 :: Docker Packaging</h2>
+
+      <p>The foundation of the pipeline is absolute environmental parity. The phrase "it works on my machine" is an engineering failure. By forcing the application and its dependencies into a Docker image, the unit of deployment becomes an immutable artifact.</p>
+
+      <p>We rely on multi-stage Docker builds. The first stage contains the heavy build tooling (compilers, package managers) needed to assemble the application. The second stage, the actual production image, copies only the compiled binary or the finalized assets onto a minimal base image (like Alpine or distroless). This reduces the attack surface and strips gigabytes of dead weight from the container registry.</p>
+
+      <div class="terminal-block">
+        <pre><span class="cmd">FROM</span> node:18-alpine AS builder
+<span class="cmd">WORKDIR</span> /app
+<span class="cmd">COPY</span> package*.json ./
+<span class="cmd">RUN</span> npm ci
+<span class="cmd">COPY</span> . .
+<span class="cmd">RUN</span> npm run build
+
+<span class="cmd">FROM</span> nginx:alpine
+<span class="cmd">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="cmd">EXPOSE</span> 80
+<span class="cmd">CMD</span> ["nginx", "-g", "daemon off;"]</pre>
+      </div>
+
+      <h2>STAGE_02 :: Jenkins Automation & Tests</h2>
+
+      <p>Once the application is containerized, the release process must be removed from human hands. Jenkins, while old-fashioned compared to newer CI platforms, remains ruthlessly effective for defining a <code>Jenkinsfile</code> that executes inside the team's VPC without external dependencies.</p>
+
+      <p>The pipeline executes the test suite against the built artifact. Crucially, the tests do not run against the developer's raw code; they run against the instantiated Docker container. This proves that the image itself—the exact bytes that will hit production—is capable of starting, binding to ports, and handling traffic without crashing on a missing dependency.</p>
+
+      <div class="full-width-figure">
+        <div class="svg-blueprint">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 280" width="100%">
+            <rect width="1100" height="280" fill="#ffffff" />
+            
+            <!-- Grid Lines -->
+            <line x1="0" y1="140" x2="1100" y2="140" stroke="#f4f4f4" stroke-width="2" />
+            <line x1="50" y1="0" x2="50" y2="280" stroke="#f4f4f4" stroke-width="2" />
+
+            <!-- The Pipeline Track -->
+            <path d="M 80 140 L 980 140" fill="none" stroke="#111111" stroke-width="4" />
+            
+            <!-- Start Node -->
+            <circle cx="80" cy="140" r="10" fill="#111111" />
+            <text x="80" y="115" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">GIT PUSH</text>
+
+            <!-- Stage Boxes -->
+            <!-- 1. Build -->
+            <rect x="180" y="110" width="100" height="60" fill="#ffffff" stroke="#111111" stroke-width="2" />
+            <text x="230" y="145" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">BUILD</text>
+            <circle cx="280" cy="140" r="4" fill="#ffffff" stroke="#111111" stroke-width="2" /> <!-- Hard Stop marker -->
+            <line x1="280" y1="140" x2="280" y2="200" stroke="#111111" stroke-width="1" stroke-dasharray="2 2" />
+            <text x="280" y="215" font-family="'Karla', sans-serif" font-size="10" fill="#777777" text-anchor="middle">Syntax/Dep Fail</text>
+
+            <!-- 2. Test -->
+            <rect x="360" y="110" width="100" height="60" fill="#f4f4f4" stroke="#111111" stroke-width="2" />
+            <text x="410" y="145" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">TEST</text>
+            <circle cx="460" cy="140" r="4" fill="#ffffff" stroke="#111111" stroke-width="2" />
+            <line x1="460" y1="140" x2="460" y2="200" stroke="#111111" stroke-width="1" stroke-dasharray="2 2" />
+            <text x="460" y="215" font-family="'Karla', sans-serif" font-size="10" fill="#777777" text-anchor="middle">Spec Failure</text>
+
+            <!-- 3. Trivy Scan -->
+            <rect x="540" y="110" width="100" height="60" fill="#ffffff" stroke="#111111" stroke-width="2" />
+            <text x="590" y="145" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">SCAN</text>
+            <circle cx="640" cy="140" r="4" fill="#ffffff" stroke="#111111" stroke-width="2" />
+            <line x1="640" y1="140" x2="640" y2="200" stroke="#111111" stroke-width="1" stroke-dasharray="2 2" />
+            <text x="640" y="215" font-family="'Karla', sans-serif" font-size="10" fill="#777777" text-anchor="middle">CRITICAL CVE</text>
+
+            <!-- 4. Deploy -->
+            <rect x="720" y="110" width="100" height="60" fill="#111111" />
+            <text x="770" y="145" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">DEPLOY</text>
+            <circle cx="820" cy="140" r="4" fill="#ffffff" stroke="#111111" stroke-width="2" />
+            <line x1="820" y1="140" x2="820" y2="80" stroke="#111111" stroke-width="1" stroke-dasharray="2 2" />
+            <text x="820" y="70" font-family="'Karla', sans-serif" font-size="10" fill="#777777" text-anchor="middle">Health Check Fail</text>
+
+            <!-- 5. Observe & Rollback Loop -->
+            <path d="M 820 60 C 880 60, 940 80, 940 140 C 940 200, 880 220, 820 220" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)" />
+            <rect x="910" y="125" width="60" height="30" fill="#ffffff" stroke="#111111" stroke-width="1"/>
+            <text x="940" y="143" font-family="'Space Mono', monospace" font-size="10" font-weight="700" text-anchor="middle" fill="#111111">OBSERVE</text>
+            <text x="880" y="235" font-family="'Space Mono', monospace" font-size="10" font-weight="700" text-anchor="middle" fill="#111111"><< ROLLBACK</text>
+
+            <!-- End target -->
+            <circle cx="1020" cy="140" r="10" fill="none" stroke="#111111" stroke-width="4" />
+            <circle cx="1020" cy="140" r="4" fill="#111111" />
+            <text x="1020" y="115" font-family="'Space Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">LIVE</text>
+
+            <defs>
+              <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <polygon points="0 0, 6 3, 0 6" fill="#333333" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+        <figcaption>Fig 1. — The Release Gauntlet. The pipeline enforces structural progression from left to right. The white circles denote hard-stop boundaries: a failure at any node instantly halts the release and alerts the team. The deploy block transitions into an observation loop; if health metrics decay, a mechanical rollback returns the system to the last known stable state.</figcaption>
+      </div>
+
+      <h2>STAGE_03 :: Trivy Image Scanning</h2>
+
+      <p>Security in a small team often suffers because manual audits are slow and compliance tools are overwhelmingly noisy. We address this by embedding Trivy directly into the Jenkins pipeline immediately following the test suite. Trivy is a static vulnerability scanner targeting container images.</p>
+
+      <p>The critical design choice here is thresholding. A scanner that breaks a build for "Low" or "Medium" severity CVEs in obscure OS libraries will teach developers to ignore or disable the scanner. We configure the stage gate sequentially to fail only on <code>CRITICAL</code> and <code>HIGH</code> vulnerabilities that have published fixes. This ensures the Pipeline is a high-signal security enforcer, not a hindrance.</p>
+
+      <div class="stop-condition">
+        <h4>Pipeline Logic</h4>
+        <p>If Trivy reads an exit code of 1 due to a <code>CRITICAL</code> vulnerability in a newly added dependency, Jenkins refuses to push the image to the remote registry. The flawed code physically cannot reach the deployment server.</p>
+      </div>
+
+      <h2>STAGE_04 :: Continuous Deployment & Observation</h2>
+
+      <p>With the image built, tested, and scanned, it lands in the registry. The deployment stage involves logging into the production machine via SSH from the CI runner and triggering a pull and a container swap. This does not involve Kubernetes rolling updates; it frequently relies on robust Docker Compose or systemd configurations.</p>
+
+      <p>Deploying is only half the contract. The other half is observing the aftermath. The team utilizes a standard Prometheus and Grafana stack, observing the four golden signals: latency, traffic, errors, and saturation. A new release is not considered "Done" when the container starts; it is "Done" when it has baked in production for an hour without elevating the error rate or pegging the CPU.</p>
+
+      <h2>STAGE_05 :: The Immediate Rollback</h2>
+
+      <p>Despite tests and scans, bad logic will eventually infiltrate production. The defining characteristic of a mature, small-team pipeline is not that it achieves zero errors, but that it recovers instantly.</p>
+
+      <p>Because the Docker images are tagged immutably (e.g., using Git commit SHAs rather than the dreaded <code>:latest</code> tag), reverting a deployment does not require rebuilding or tracing code paths. The deployment script simply points the configuration back to the previous known-good SHA and restarts the container. This mechanical rollback is executed in seconds. The developers can then conduct a postmortem on the broken image locally, detached from the pressure of a live outage.</p>
+
+      <p>A pragmatic pipeline prioritizes boring operations. By constraining the problem space—shipping sealed containers through automated, binary stage gates—a small team guarantees shipping velocity without the crushing overhead of maintaining an enterprise behemoth.</p>
+
+    </main>
+  </div>
+
+</body>
+</html>

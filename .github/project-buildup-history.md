@@ -32,3 +32,7 @@
 
 - Task summary: Quick follow-up: the variable names were inconsistent so cleaned those up across the notebook before calling it done.
 - Deliverable: Cleaner than this morning's version.
+## 2023-06-08 - Day 6: Architecture
+
+- Task summary: Ended up revisiting this in the evening — wrapped a repeated block in a helper function since it showed up three times.
+- Deliverable: Cleaner than this morning's version.

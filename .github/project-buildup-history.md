@@ -36,3 +36,7 @@
 
 - Task summary: Ended up revisiting this in the evening — wrapped a repeated block in a helper function since it showed up three times.
 - Deliverable: Cleaner than this morning's version.
+## 2023-06-08 - Day 6: Architecture
+
+- Task summary: Came back after lunch and realized ran the whole thing end to end again after a fresh look. Caught a stale import that broke the flow.
+- Deliverable: Pushed before end of day.

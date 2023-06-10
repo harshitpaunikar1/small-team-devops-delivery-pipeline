@@ -48,3 +48,7 @@
 
 - Task summary: Late-night fix: resolved a merge conflict that came up when I switched branches to check something else.
 - Deliverable: One of those satisfying small wins.
+## 2023-06-10 - Day 6: Architecture
+
+- Task summary: Sunday evening, couldn't leave the failing assert alone. Tracked it down to a missing sort step. Resolved.
+- Deliverable: One of those satisfying small wins.

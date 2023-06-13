@@ -64,3 +64,7 @@
 
 - Task summary: Spent another hour on this: re-ran the plots with better axis labels and a more readable color palette.
 - Deliverable: Should've caught it earlier but better now than later.
+## 2023-06-13 - Day 9: Interactions
+
+- Task summary: Came back after lunch and realized there was a subtle off-by-one error in the index slicing that was silently skewing results. Caught it and fixed it.
+- Deliverable: Should've caught it earlier but better now than later.

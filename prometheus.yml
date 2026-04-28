@@ -1,0 +1,57 @@
+# Prometheus configuration for small-team DevOps delivery pipeline monitoring.
+# Scrapes application metrics, Node Exporter, and cAdvisor.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    environment: "production"
+    team: "platform"
+
+# Alerting rules file references
+rule_files:
+  - "alert_rules.yml"
+
+# Alertmanager configuration (configure via environment variables at runtime)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # alertmanager:9093
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+    metrics_path: /metrics
+
+  # Application metrics endpoint
+  - job_name: "devops-app"
+    static_configs:
+      - targets: ["app:8000"]
+    metrics_path: /metrics
+    scrape_interval: 15s
+    honor_labels: true
+    params:
+      format: ["prometheus"]
+
+  # Node Exporter for host-level metrics (CPU, memory, disk, network)
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"]
+    scrape_interval: 30s
+
+  # cAdvisor for container-level resource tracking
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # PostgreSQL exporter (optional; requires postgres_exporter container)
+  - job_name: "postgres"
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+    scrape_interval: 30s

@@ -34,7 +34,7 @@
 - Deliverable: Cleaner than this morning's version.
 ## 2023-06-08 - Day 6: Architecture
 
-- Task summary: Ended up revisiting this in the evening — wrapped a repeated block in a helper function since it showed up three times.
+- Task summary: Ended up revisiting this in the evening - wrapped a repeated block in a helper function since it showed up three times.
 - Deliverable: Cleaner than this morning's version.
 ## 2023-06-08 - Day 6: Architecture
 
@@ -82,5 +82,5 @@
 - Deliverable: Finished with final polish looking decent enough to call this version done, even if I could still nitpick a few things. I also left myself a few rough reminders for the next day so I would not have to rediscover the same context again.
 ## 2023-06-17 - Day 11: README check
 
-- Task summary: Weekend fix — the visualizations had overlapping labels in narrow viewports. Adjusted the figure size and padding.
-- Deliverable: Nothing dramatic — just keeping things tidy.
+- Task summary: Weekend fix - the visualizations had overlapping labels in narrow viewports. Adjusted the figure size and padding.
+- Deliverable: Nothing dramatic - just keeping things tidy.

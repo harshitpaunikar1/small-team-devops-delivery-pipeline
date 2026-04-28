@@ -162,7 +162,7 @@
   <div class="machine-grid">
     <header>
       <h1>Pragmatism in the Pipeline</h1>
-      <p class="deck">Operational fragility is rarely solved by adopting massive, sprawling orchestration frameworks. For a small engineering team, reliability is achieved by enforcing rigid, unglamorous stage gates—packaging, scanning, deploying, and observing—without pretending to be a hyperscaler.</p>
+      <p class="deck">Operational fragility is rarely solved by adopting massive, sprawling orchestration frameworks. For a small engineering team, reliability is achieved by enforcing rigid, unglamorous stage gates-packaging, scanning, deploying, and observing-without pretending to be a hyperscaler.</p>
     </header>
 
     <main>
@@ -194,7 +194,7 @@
 
       <p>Once the application is containerized, the release process must be removed from human hands. Jenkins, while old-fashioned compared to newer CI platforms, remains ruthlessly effective for defining a <code>Jenkinsfile</code> that executes inside the team's VPC without external dependencies.</p>
 
-      <p>The pipeline executes the test suite against the built artifact. Crucially, the tests do not run against the developer's raw code; they run against the instantiated Docker container. This proves that the image itself—the exact bytes that will hit production—is capable of starting, binding to ports, and handling traffic without crashing on a missing dependency.</p>
+      <p>The pipeline executes the test suite against the built artifact. Crucially, the tests do not run against the developer's raw code; they run against the instantiated Docker container. This proves that the image itself-the exact bytes that will hit production-is capable of starting, binding to ports, and handling traffic without crashing on a missing dependency.</p>
 
       <div class="full-width-figure">
         <div class="svg-blueprint">
@@ -259,7 +259,7 @@
             </defs>
           </svg>
         </div>
-        <figcaption>Fig 1. — The Release Gauntlet. The pipeline enforces structural progression from left to right. The white circles denote hard-stop boundaries: a failure at any node instantly halts the release and alerts the team. The deploy block transitions into an observation loop; if health metrics decay, a mechanical rollback returns the system to the last known stable state.</figcaption>
+        <figcaption>Fig 1. - The Release Gauntlet. The pipeline enforces structural progression from left to right. The white circles denote hard-stop boundaries: a failure at any node instantly halts the release and alerts the team. The deploy block transitions into an observation loop; if health metrics decay, a mechanical rollback returns the system to the last known stable state.</figcaption>
       </div>
 
       <h2>STAGE_03 :: Trivy Image Scanning</h2>
@@ -285,7 +285,7 @@
 
       <p>Because the Docker images are tagged immutably (e.g., using Git commit SHAs rather than the dreaded <code>:latest</code> tag), reverting a deployment does not require rebuilding or tracing code paths. The deployment script simply points the configuration back to the previous known-good SHA and restarts the container. This mechanical rollback is executed in seconds. The developers can then conduct a postmortem on the broken image locally, detached from the pressure of a live outage.</p>
 
-      <p>A pragmatic pipeline prioritizes boring operations. By constraining the problem space—shipping sealed containers through automated, binary stage gates—a small team guarantees shipping velocity without the crushing overhead of maintaining an enterprise behemoth.</p>
+      <p>A pragmatic pipeline prioritizes boring operations. By constraining the problem space-shipping sealed containers through automated, binary stage gates-a small team guarantees shipping velocity without the crushing overhead of maintaining an enterprise behemoth.</p>
 
     </main>
   </div>
